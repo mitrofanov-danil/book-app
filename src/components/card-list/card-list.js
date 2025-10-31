@@ -42,7 +42,6 @@ export class CardList extends DivComponent {
   render() {
     this.el.classList.add("card-list");
     if (this.state.loading) return this.renderLoading();
-    // this.el.innerHTML = `<p class="card-list__title">Найдено книг - ${this.state.numFound}</p>`;
     if (this.state.list.length) {
       this.renderCards();
       this.el.addEventListener("click", this.handleCardClick);
