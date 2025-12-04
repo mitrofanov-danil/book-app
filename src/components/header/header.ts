@@ -1,13 +1,16 @@
 import { DivComponent } from "../../common/div-component";
+import { AppState } from "../../types";
 import "./header.css";
 
 export class Header extends DivComponent {
-  constructor(appState) {
+  private appState: AppState;
+
+  constructor(appState: AppState) {
     super();
     this.appState = appState;
   }
 
-  render() {
+  render(): HTMLDivElement {
     this.el.innerHTML = "";
     this.el.classList.add("header");
     this.el.innerHTML = `

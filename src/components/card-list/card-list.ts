@@ -1,35 +1,42 @@
 import { DivComponent } from "../../common/div-component";
-import { Card } from "../../components/card/card.js";
+import { Card } from "../../components/card/card";
+import { AppState, CardListState } from "../../types";
 import "./card-list.css";
 
 export class CardList extends DivComponent {
-  constructor(appState, state) {
+  private appState: AppState;
+  private state: CardListState;
+  private handleCardClick: (event: MouseEvent) => void;
+
+  constructor(appState: AppState, state: CardListState) {
     super();
     this.appState = appState;
     this.state = state;
-    this.handleCardClick = this.handleCardClick.bind(this);
+    this.handleCardClick = this.handleCardClickMethod.bind(this);
   }
 
-  handleCardClick(event) {
-    const button = event.target.closest("button[data-id]");
+  private handleCardClickMethod(event: MouseEvent): void {
+    const button = (event.target as HTMLElement).closest("button[data-id]") as HTMLButtonElement | null;
     if (button) {
       const id = button.getAttribute("data-id");
-      const isFavorite = this.appState.favorites.some(
-        (item) => item.key === id
-      );
+      if (id) {
+        const isFavorite = this.appState.favorites.some(
+          (item) => item.key === id
+        );
 
-      isFavorite ? this.deleteFromFavorites(id) : this.addToFavorites(id);
+        isFavorite ? this.deleteFromFavorites(id) : this.addToFavorites(id);
+      }
     }
   }
 
-  addToFavorites(id) {
+  private addToFavorites(id: string): void {
     const book = this.state.list.find((item) => item.key === id);
     if (book) {
       this.appState.favorites.push(book);
     }
   }
 
-  deleteFromFavorites(id) {
+  private deleteFromFavorites(id: string): void {
     const indexToRemove = this.appState.favorites.findIndex(
       (item) => item.key === id
     );
@@ -39,7 +46,7 @@ export class CardList extends DivComponent {
     }
   }
 
-  render() {
+  render(): HTMLDivElement {
     this.el.classList.add("card-list");
     if (this.state.loading) return this.renderLoading();
     if (this.state.list.length) {
@@ -49,13 +56,13 @@ export class CardList extends DivComponent {
     return this.el;
   }
 
-  renderLoading() {
+  private renderLoading(): HTMLDivElement {
     this.el.innerHTML = `<div class="loader"><span /></div>`;
 
     return this.el;
   }
 
-  renderCards() {
+  private renderCards(): void {
     const cardGrid = document.createElement("div");
     cardGrid.classList.add("card-list__wrapper");
 

@@ -1,14 +1,18 @@
 import { DivComponent } from "../../common/div-component";
+import { AppState, Book } from "../../types";
 import "./card.css";
 
 export class Card extends DivComponent {
-  constructor(appState, cardState) {
+  private appState: AppState;
+  private cardState: Book;
+
+  constructor(appState: AppState, cardState: Book) {
     super();
     this.appState = appState;
     this.cardState = cardState;
   }
 
-  render() {
+  render(): HTMLDivElement {
     const isFavorite = this.appState.favorites.some(
       (item) => item.key === this.cardState.key
     );
